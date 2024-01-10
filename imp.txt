@@ -1,6 +1,6 @@
 export PROJECT_ID=$(gcloud config get-value project)
-export REGION=us-central1
-export ZONE=us-central1-a
+export REGION=
+export ZONE=
 export CLUSTER_NAME=hello-cluster
 export REPO_NAME=my-repository
 
@@ -28,6 +28,11 @@ gcloud source repos create sample-app
 git clone https://source.developers.google.com/p/$PROJECT_ID/r/sample-app
 cd ~
 gsutil cp -r gs://spls/gsp330/sample-app/* sample-app
+
+for file in sample-app/cloudbuild-dev.yaml sample-app/cloudbuild.yaml; do
+    sed -i "s/<your-region>/${REGION}/g" "$file"
+    sed -i "s/<your-zone>/${ZONE}/g" "$file"
+done
 
 git init
 cd sample-app/
